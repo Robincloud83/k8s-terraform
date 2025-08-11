@@ -1,0 +1,76 @@
+provider "aws" {
+  region = "ap-south-1"
+}
+
+# Get default VPC (needed for SG)
+data "aws_vpc" "default" {
+  default = true
+}
+
+# Key pair
+resource "aws_key_pair" "robin_key" {
+  key_name   = "robin"
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDRkIkmkzODuAOWnqIB8GEHnPeVimc8gBbjiDj58HXlX cloud@Robin"
+}
+
+# Security group allowing SSH, HTTP, HTTPS
+resource "aws_security_group" "robin_sg" {
+  name        = "robin-sg"
+  description = "Allow SSH, HTTP, and HTTPS"
+  vpc_id      = data.aws_vpc.default.id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# EC2 instance
+resource "aws_instance" "robin_instance" {
+  ami                    = "ami-0f918f7e67a3323f0"
+  instance_type          = "t2.micro"
+  key_name               = aws_key_pair.robin_key.key_name
+  vpc_security_group_ids = [aws_security_group.robin_sg.id]
+
+  root_block_device {
+    volume_size = 20
+    volume_type = "gp3"
+  }
+
+  tags = {
+    Name = "robin-terraform"
+  }
+}
+
+# Elastic IP
+resource "aws_eip" "robineip" {
+  instance = aws_instance.robin_instance.id
+  
+  tags = {
+    Name = "robineip"
+  }
+}
+
