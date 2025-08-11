@@ -51,9 +51,12 @@ provider "aws" {
   region = "ap-south-1"
 }
 
-resource "aws_s3_bucket" "test_bucket" {
-  bucket = "my-terraform-test-bucket-12345"
-  acl    = "private"
+resource "aws_s3_bucket" "my_bucket" {
+  bucket = "my-terraform-bucket-${formatdate("YYYYMMDDhhmmss", timestamp())}"
+
+  tags = {
+    Name = "Terraform Test Bucket"
+  }
 }
 
 
