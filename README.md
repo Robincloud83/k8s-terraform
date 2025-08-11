@@ -65,3 +65,5 @@ terraform init
 terraform plan
 terraform apply
 ### Type yes to create the bucket.
+
+https://registry.terraform.io/browse/modules
