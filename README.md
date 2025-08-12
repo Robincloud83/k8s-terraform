@@ -21,13 +21,40 @@ eksctl version
 ## 4️⃣ Create a Kubernetes Cluster in AWS
 ## Example (2 nodes, t3.micro):
 eksctl create cluster --name my-cluster --region ap-south-1 --nodes 2 --node-type t3.micro
-## This will:
-## Create the EKS cluster
-## Configure kubectl automatically
 
-## 5️⃣ Test the Cluster
+## also
+## 1️⃣ Create an EKS Cluster
+
+eksctl create cluster `
+  --name my-eks-cluster `
+  --region eu-north-1 `
+  --nodegroup-name my-nodes `
+  --node-type t3.medium `
+  --nodes 2 `
+  --nodes-min 2 `
+  --nodes-max 4 `
+  --managed
+### Explanation:
+# --name → Cluster name
+# --region → AWS region (eu-north-1 for you)
+# --nodegroup-name → Worker node group name
+# --node-type → EC2 instance type for nodes
+# --nodes → Default node count
+# --managed → AWS-managed node group
+
+##  Test the Cluster
 kubectl get nodes
-kubectl get pods --all-namespaces
+kubectl get pods --all-namespaces  
+
+### 2️⃣ Delete an EKS Cluster
+
+eksctl delete cluster --name my-eks-cluster --region eu-north-1
+## This will:
+## Delete the EKS control plane
+## Delete the managed node group
+## Release related AWS resources
+
+
 ## If you want, I can give you a single PowerShell script that installs kubectl, aws-cli, eksctl, and creates the AWS cluster in one go. That would save you a lot of manual work.
 
 
