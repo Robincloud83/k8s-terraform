@@ -44,6 +44,8 @@ eksctl create cluster `
 
 ##  Test the Cluster
 kubectl get nodes
+
+
 kubectl get pods --all-namespaces  
 
 ### 2️⃣ Delete an EKS Cluster
