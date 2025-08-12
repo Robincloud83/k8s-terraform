@@ -1,0 +1,12 @@
+# Create AMI from the EC2 instance
+resource "aws_ami_from_instance" "robin_ami" {
+  name               = "robin-instance-ami"
+  source_instance_id = aws_instance.robin_instance.id
+  snapshot_without_reboot = true   # prevents reboot during AMI creation
+
+  tags = {
+    Name        = "robin-ami"
+    Environment = "dev"
+    CreatedBy   = "Terraform"
+  }
+}
