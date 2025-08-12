@@ -9,9 +9,10 @@ kubectl version --client
 
 ## 3️⃣ Install eksctl (for AWS EKS Clusters)
 ## eksctl is the easiest way to create and manage EKS clusters.
-
-## Install eksctl:
-choco install eksctl
+curl -sSL "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_Windows_amd64.zip" -o eksctl.zip
+### then extract it eksctl.zip
+## also move it to "C:\Windows\System32\"
+eksctl version
 ## (Requires Chocolatey package manager.)
 
 ## Verify:
